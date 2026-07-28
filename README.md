@@ -12,6 +12,18 @@
 > 顺便这个的美术严格来讲属于b站的 [EverydayOneCat](https://b23.tv/36WQ9xd)。
 > 大家也多多支持cat老师，ta有很多可爱猫动画🥺
 
+---
+
+## 下载
+
+去 [Releases](https://github.com/neco0w0/CatCursor/releases/latest) 页面下载最新的压缩包，解压后直接打开 `CatCursor.app`。
+
+首次打开如果提示"无法验证开发者"或"已损坏"：
+- 打开终端，输入 `xattr -cr ~/Downloads/CatCursor.app`（换成你实际解压的路径），回车后重新打开
+- 或者：系统设置 → 隐私与安全性 → 滑到最下面，找到提示后点"仍要打开"
+
+---
+
 An animated cat pointer for macOS, ported (without asking, but with love) from
 the Windows cursor pack **《普通的鼠标指针》V1.5** by **HappyCadogt**.
 
@@ -54,12 +66,14 @@ your mouse everywhere, in every app, no special permissions needed.
 
 ## Install
 
-There's no download yet — you'll have to build it yourself. Takes about a
-minute, needs macOS 14+ and Xcode command line tools.
+There's a prebuilt release on the
+[Releases page](https://github.com/neco0w0/CatCursor/releases/latest) — or
+build it yourself, which takes about a minute and needs macOS 14+ and Xcode
+command line tools:
 
 ```bash
 git clone <this repo>
-cd CatCursorV1.5
+cd CatCursor
 ./Scripts/build_app.sh
 open build/CatCursor.app
 ```

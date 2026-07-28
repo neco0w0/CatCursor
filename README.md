@@ -1,7 +1,5 @@
 # Cat Cursor for macOS
 
->
-
 > b站上刷到这个光标发现没有mac的安装渠道，一怒之下搞了个mac版的（
 >
 > 由于MAC本身的限制，切换app的时候有概率会显示原版光标，但是延迟实测不影响使用。
@@ -14,12 +12,12 @@
 > 顺便这个的美术严格来讲属于b站的 [EverydayOneCat](https://b23.tv/36WQ9xd)。
 > 大家也多多支持cat老师，ta有很多可爱猫动画🥺
 
-An animated cat pointer for macOS — an unofficial port of the Windows cursor
-pack **《普通的鼠标指针》V1.5** by **HappyCadogt**.
+An animated cat pointer for macOS, ported (without asking, but with love) from
+the Windows cursor pack **《普通的鼠标指针》V1.5** by **HappyCadogt**.
 
-The pointer plays a looping idle animation, reacts to clicks with a paw, and
-follows the system cursor's shape: text fields, window edges, split-view
-dividers, crosshairs and more.
+It idles with a little animation loop, waves a paw when you click, and
+changes shape along with whatever your cursor is doing — typing, resizing a
+window, dragging a divider, and so on.
 
 ---
 
@@ -46,28 +44,18 @@ free.
 
 ---
 
-## Why this is an app and not a "cursor theme"
+## Why not just a cursor theme?
 
-Windows installs cursor packs through the registry. **macOS has no equivalent** —
-system pointers are baked into the OS and there is no supported way to replace
-them.
-
-So this app does the only thing that works without weakening system security: it
-hides the real pointer and draws its own in a transparent, click-through window
-floating above everything else, glued to the mouse every display refresh.
-
-To know *which* cursor to draw, it reads the cursor the system is currently
-showing and matches it against a table of known cursors. That is the answer the
-frontmost app already gave the window server, so it works everywhere — including
-web pages and Electron apps — and needs **no permissions at all**: no
-Accessibility, no Input Monitoring, no Screen Recording, and no SIP changes.
+macOS doesn't let you replace the system pointers the way Windows does. So
+this app fakes it — it hides your real cursor and draws a cat on top, chasing
+your mouse everywhere, in every app, no special permissions needed.
 
 ---
 
 ## Install
 
-There is no prebuilt download yet. Building takes about a minute and needs
-macOS 14+ with Xcode command line tools.
+There's no download yet — you'll have to build it yourself. Takes about a
+minute, needs macOS 14+ and Xcode command line tools.
 
 ```bash
 git clone <this repo>
@@ -87,12 +75,9 @@ A cat icon appears in the menu bar — that menu is the whole interface:
 | **Launch at Login** | |
 | **Quit Cat Cursor** | restores the normal pointer |
 
-The build is ad-hoc signed, which is fine on the machine that built it. Moving
-the `.app` to another Mac would need a Developer ID and notarisation.
-
 **If anything ever goes wrong, quit the app and your normal pointer comes back.**
-If it crashes or is force-quit, macOS restores the pointer by itself within about
-a second — you cannot end up stuck without a cursor.
+Even if it crashes, macOS puts your real cursor back on its own within about a
+second — you can't get stuck without one.
 
 ---
 
@@ -112,81 +97,40 @@ a second — you cannot end up stuck without a cursor.
 | **drag-copy, drag-link, contextual menu, "poof"** | **the real cursor, unchanged** |
 | anything unrecognised | **the real cursor, unchanged** |
 
-The last two rows are deliberate. Those cursors carry meaning in their badge — a
-green plus means *copy*, a grey cross means *this disappears if you let go* —
-and swapping in a cat would throw that information away. **Showing the wrong
-cursor is worse than showing no cursor**, so anything the app is not sure about
-is left alone.
+The last two rows are on purpose — those cursors carry a meaning in their
+little badge (a green plus means *copy*, a fading cross means *this
+disappears if you let go*), and turning them into a cat would throw that
+information away. Better to leave a cursor alone than show the wrong thing.
 
-Seven cursors from the original pack are unused (help, handwriting,
-alternate-select, person, pin, busy, app-starting): macOS has no state that would
-ever show them.
+A handful of cursors from the original pack just never come up on macOS, so
+they're not used.
 
 ---
 
 ## Known limits
 
-- **Slight lag.** The real pointer is composited by the window server with
-  near-zero latency; a drawn one is a frame behind (~16ms). You will not notice
-  it normally, but you may on a fast flick of the mouse.
-- **The real pointer can flash back when you switch apps.** macOS sometimes
-  re-shows its own cursor across an app or Space change; the app notices and
-  hides it again, but there is a brief window where you see the original. In
-  practice this does not get in the way.
-- **Not everywhere.** The login window, lock screen and system password prompts
-  draw above every third-party window, so the normal pointer is used there. This
-  is an OS limit, not a bug.
-- **Changing the system pointer size breaks shape switching.** Cursor
-  recognition compares against reference images captured at the default pointer
-  size, so resizing every system cursor makes them all unrecognisable. It fails
-  safely — everything falls back to the real cursor rather than showing
-  something wrong — but the cat will only appear as the idle pointer until the
-  size is set back. Open an issue if you need this; regenerating the reference
-  data is possible, the tool for it just is not in this repository yet.
-- **The five static cursors are a little soft.** They only exist at 32×32 in the
-  original pack and are scaled up to match the animated ones. A pointer that
-  changes *size* every time it changes shape is more distracting than slightly
-  soft edges, so this was the deliberate trade.
+- **A tiny bit of lag.** The cat trails your actual mouse position by a
+  fraction of a second. Usually invisible, but you might catch it on a fast
+  flick of the mouse.
+- **The real cursor can flash briefly when you switch apps.** It shows up for
+  an instant and then disappears again — not much to be done about it.
+- **Not on the login screen or password prompts.** Those sit above everything
+  else, so the system cursor is all you get there.
+- **Resizing your system pointer stops shape-matching from working.** The cat
+  will just idle instead of guessing wrong. Open an issue if this bites you.
+- **The five static cursors look a little soft.** They only existed small in
+  the original pack and got scaled up. A pointer that changes size every time
+  it changes shape would be more distracting than a little softness, so that
+  was the trade.
 
 ---
 
-## Building on this
+## Found a cursor that doesn't turn into a cat?
 
-The artwork is regenerated from the original Windows pack rather than committed
-by hand:
-
-```bash
-python3 Scripts/prepare_assets.py --source /path/to/安装文件
-```
-
-`Sources/MacCursor/` is a small AppKit app: an overlay window, a CALayer that
-plays PNG frame sequences, display-link pointer tracking, and the cursor
-recognition described above. `Resources/cursor_table.json` holds the reference
-images that recognition matches against.
-
-Three self-checks are built into the binary:
-
-```bash
-# draw any cursor offscreen with a crosshair on its hotspot
-build/CatCursor.app/Contents/MacOS/MacCursor --render-test /tmp/out.png vertical medium
-
-# run the overlay briefly and report what is actually on screen
-build/CatCursor.app/Contents/MacOS/MacCursor --diagnose
-
-# log every shape change as it happens
-build/CatCursor.app/Contents/MacOS/MacCursor --verbose
-```
-
-### Found a cursor that does not turn into a cat?
-
-Most likely macOS is using a cursor that is not in the reference data yet —
-there are considerably more of them than the public `NSCursor` API suggests, and
-several are private. Window-edge resizing, for instance, uses entirely different
-artwork from the split-view dividers.
-
-Open an issue describing **exactly what you were doing** — which app, and what
-you hovered over or dragged. That is enough to reproduce it, capture the cursor
-and add it.
+Probably macOS is using one that isn't recognized yet — there are more
+cursor shapes floating around than you'd expect. Open an issue describing
+**exactly what you were doing** — which app, and what you were hovering over
+or dragging — and that's usually enough to track it down and add it.
 
 ---
 

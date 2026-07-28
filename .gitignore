@@ -1,0 +1,8 @@
+.build/
+build/
+__pycache__/
+
+# private: engineering record and the tooling behind it, local only
+RECORD.md
+Spike/
+.DS_Store

@@ -1,0 +1,126 @@
+{
+  "arrow": {
+    "type": "animated",
+    "frameCount": 206,
+    "fps": 30.0,
+    "width": 121,
+    "height": 107,
+    "hotspotX": 10,
+    "hotspotY": 7,
+    "mediumWidthPoints": 52,
+    "source": "Normal.ani"
+  },
+  "click": {
+    "type": "animated",
+    "frameCount": 94,
+    "fps": 30.0,
+    "width": 106,
+    "height": 103,
+    "hotspotX": 5,
+    "hotspotY": 9,
+    "mediumWidthPoints": 46,
+    "source": "Link.ani",
+    "segments": {
+      "intro": [
+        0,
+        25
+      ],
+      "hold": [
+        40,
+        47
+      ],
+      "outro": [
+        73,
+        93
+      ]
+    }
+  },
+  "text": {
+    "type": "animated",
+    "frameCount": 140,
+    "fps": 30.0,
+    "width": 117,
+    "height": 115,
+    "hotspotX": 21,
+    "hotspotY": 39,
+    "mediumWidthPoints": 50,
+    "source": "Text.ani"
+  },
+  "horizontal": {
+    "type": "animated",
+    "frameCount": 127,
+    "fps": 30.0,
+    "width": 107,
+    "height": 107,
+    "hotspotX": 56,
+    "hotspotY": 85,
+    "mediumWidthPoints": 46,
+    "source": "Horizontal.ani"
+  },
+  "vertical": {
+    "type": "animated",
+    "frameCount": 164,
+    "fps": 30.0,
+    "width": 112,
+    "height": 112,
+    "hotspotX": 22,
+    "hotspotY": 56,
+    "mediumWidthPoints": 48,
+    "source": "Vertical.ani"
+  },
+  "precision": {
+    "type": "static",
+    "frameCount": 1,
+    "fps": 0,
+    "width": 32,
+    "height": 32,
+    "hotspotX": 16,
+    "hotspotY": 16,
+    "mediumWidthPoints": 26,
+    "source": "Precision.cur"
+  },
+  "unavailable": {
+    "type": "static",
+    "frameCount": 1,
+    "fps": 0,
+    "width": 32,
+    "height": 32,
+    "hotspotX": 16,
+    "hotspotY": 16,
+    "mediumWidthPoints": 26,
+    "source": "Unavailable.cur"
+  },
+  "move": {
+    "type": "static",
+    "frameCount": 1,
+    "fps": 0,
+    "width": 32,
+    "height": 32,
+    "hotspotX": 16,
+    "hotspotY": 16,
+    "mediumWidthPoints": 26,
+    "source": "Move.cur"
+  },
+  "diagonal1": {
+    "type": "static",
+    "frameCount": 1,
+    "fps": 0,
+    "width": 32,
+    "height": 32,
+    "hotspotX": 16,
+    "hotspotY": 16,
+    "mediumWidthPoints": 26,
+    "source": "Diagonal1.cur"
+  },
+  "diagonal2": {
+    "type": "static",
+    "frameCount": 1,
+    "fps": 0,
+    "width": 32,
+    "height": 32,
+    "hotspotX": 16,
+    "hotspotY": 16,
+    "mediumWidthPoints": 26,
+    "source": "Diagonal2.cur"
+  }
+}

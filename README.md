@@ -4,7 +4,7 @@
 >
 > 由于MAC本身的限制，切换app的时候有概率会显示原版光标，但是延迟实测不影响使用。
 >
-> Windows 原版光标由 b 站 [HappyCadogt](https://space.bilibili.com/406949928) 制作，
+> Windows 原版光标由 b 站 [HappyCadogt](https://space.bilibili.com/406949928) 制作！！！😺
 > 本项目基于其 V1.5 移植。Windows 原版下载：
 > https://happycadogt.lanzoul.com/b01881lrdg 密码：`1145`
 > 顺便这个链接里的文档我发现也有linux版本的
@@ -24,7 +24,7 @@
 | 精确定位 | <img src="Resources/Cursors/precision/0000.png" width="44"> | | 拖动 | <img src="Resources/Cursors/move/0000.png" width="44"> |
 | 禁用 | <img src="Resources/Cursors/unavailable/0000.png" width="44"> | | | |
 
-上面是静态截图，实际用起来是会动的——平时猫在那慢慢动，点一下会弹出来，松开缩回去。
+上面是静态截图，实际用起来是会动的——平时猫标会动，点一下会弹出来，松开缩回去。
 
 ---
 

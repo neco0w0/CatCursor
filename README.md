@@ -18,13 +18,12 @@
 
 | 什么时候 | 长这样 | | 什么时候 | 长这样 |
 |---|:---:|---|---|:---:|
-| 平时 | <img src="Resources/Cursors/arrow/0000.png" width="90"> | | 左右拉伸 | <img src="Resources/Cursors/horizontal/0000.png" width="80"> |
-| 点击 / 链接上 | <img src="Resources/Cursors/click/0045.png" width="80"> | | 上下拉伸 | <img src="Resources/Cursors/vertical/0000.png" width="84"> |
-| 文本框上 | <img src="Resources/Cursors/text/0000.png" width="88"> | | 斜角拉伸 | <img src="Resources/Cursors/diagonal1/0000.png" width="44"> <img src="Resources/Cursors/diagonal2/0000.png" width="44"> |
+| 平时（会动） | <img src="Resources/Cursors/arrow/0000.png" width="90"> | | 左右拉伸（会动） | <img src="Resources/Cursors/horizontal/0000.png" width="80"> |
+| 点击 / 链接上 （会动）| <img src="Resources/Cursors/click/0045.png" width="80"> | | 上下拉伸 （动）| <img src="Resources/Cursors/vertical/0000.png" width="84"> |
+| 文本框上（动） | <img src="Resources/Cursors/text/0000.png" width="88"> | | 斜角拉伸 | <img src="Resources/Cursors/diagonal1/0000.png" width="44"> <img src="Resources/Cursors/diagonal2/0000.png" width="44"> |
 | 精确定位 | <img src="Resources/Cursors/precision/0000.png" width="44"> | | 拖动 | <img src="Resources/Cursors/move/0000.png" width="44"> |
 | 禁用 | <img src="Resources/Cursors/unavailable/0000.png" width="44"> | | | |
 
-上面是静态截图，实际用起来是会动的——平时猫标会动，点一下会弹出来，松开缩回去。
 
 ---
 

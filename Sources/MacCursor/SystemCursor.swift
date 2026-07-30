@@ -56,14 +56,19 @@ enum SystemCursor {
     /// sit above one. A single CGDisplayShowCursor would then decrement without
     /// revealing anything -- which would silently break the fallback that hands
     /// control back to the system cursor, the one path that must never fail.
+    /// The first show is unconditional, and must stay that way.
+    /// CGCursorIsVisible is deprecated and can still report "visible" moments
+    /// after a hide, so gating the call on it turns restore() into a no-op and
+    /// strands the user with no pointer at all. The loop only exists to undo any
+    /// extra hides `reassertIfNeeded` stacked up.
     static func restore() {
         guard isHiding else { return }
         isHiding = false
         var attempts = 0
-        while !isVisible && attempts < 8 {
+        repeat {
             CGDisplayShowCursor(CGMainDisplayID())
             attempts += 1
-        }
+        } while !isVisible && attempts < 8
     }
 
     /// Space switches, display changes and waking from sleep can bring the real

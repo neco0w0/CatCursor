@@ -50,6 +50,16 @@ final class StatusItemController: NSObject, NSMenuDelegate {
                            on: SMAppService.mainApp.status == .enabled))
 
         menu.addItem(.separator())
+        let calibrate = NSMenuItem(title: "Calibrate for This Mac…",
+                                   action: #selector(calibrate), keyEquivalent: "")
+        calibrate.target = self
+        calibrate.toolTip = "Learn what this Mac's system cursors look like, so "
+            + "the cat can follow their shapes. Needed on macOS versions other "
+            + "than the one this build shipped with, or if you change the "
+            + "system pointer size."
+        menu.addItem(calibrate)
+
+        menu.addItem(.separator())
         menu.addItem(NSMenuItem(title: "Quit Cat Cursor",
                                 action: #selector(quit), keyEquivalent: "q"))
         menu.items.last?.target = self
@@ -95,6 +105,26 @@ final class StatusItemController: NSObject, NSMenuDelegate {
             alert.alertStyle = .warning
             alert.runModal()
         }
+    }
+
+    /// Handed in by the app delegate, which owns the overlay that has to be
+    /// stood down while calibration takes the pointer.
+    var onCalibrate: (() -> Void)?
+
+    @objc private func calibrate() {
+        let alert = NSAlert()
+        alert.messageText = "Calibrate for this Mac?"
+        alert.informativeText =
+            "Cat Cursor will take over the pointer for about 20 seconds while it "
+            + "learns what this Mac's system cursors look like. Please don't use "
+            + "the mouse until it finishes.\n\nThis is what lets the cat follow "
+            + "cursor shapes on your macOS version."
+        alert.addButton(withTitle: "Calibrate")
+        alert.addButton(withTitle: "Cancel")
+        alert.alertStyle = .informational
+        NSApp.activate(ignoringOtherApps: true)
+        guard alert.runModal() == .alertFirstButtonReturn else { return }
+        onCalibrate?()
     }
 
     @objc private func quit() { NSApp.terminate(nil) }

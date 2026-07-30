@@ -10,13 +10,17 @@ APP="$ROOT/build/CatCursor.app"
 swift build -c release --package-path "$ROOT"
 
 rm -rf "$APP"
-mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
+mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources" "$APP/Contents/Helpers"
 
 cp "$ROOT/.build/release/MacCursor" "$APP/Contents/MacOS/MacCursor"
+# Launched only during calibration, to produce a genuine text I-beam.
+cp "$ROOT/.build/release/CursorFixture" "$APP/Contents/Helpers/CursorFixture"
 cp "$ROOT/Info.plist" "$APP/Contents/Info.plist"
 cp -R "$ROOT/Resources/Cursors" "$APP/Contents/Resources/Cursors"
 cp "$ROOT/Resources/cursor_table.json" "$APP/Contents/Resources/cursor_table.json"
 
+# Nested code has to be signed before the bundle that contains it.
+codesign --force --sign - "$APP/Contents/Helpers/CursorFixture"
 codesign --force --sign - "$APP"
 
 echo "built: $APP"

@@ -97,8 +97,28 @@ struct CursorTable {
         return CursorTable(side: side, entries: entries)
     }
 
+    /// Where calibration writes its result.
+    ///
+    /// Not into the app bundle: that is code-signed, and writing to it would
+    /// invalidate the signature.
+    static func userTableURL() -> URL {
+        let support = FileManager.default.urls(for: .applicationSupportDirectory,
+                                               in: .userDomainMask).first
+            ?? URL(fileURLWithPath: NSHomeDirectory())
+        return support
+            .appendingPathComponent("CatCursor")
+            .appendingPathComponent("cursor_table.json")
+    }
+
+    static var hasUserTable: Bool {
+        FileManager.default.fileExists(atPath: userTableURL().path)
+    }
+
     private static func resourceURL() -> URL? {
         var candidates: [URL] = []
+        // A table calibrated on this machine always wins: the bundled one was
+        // captured on whatever macOS the release was built on.
+        candidates.append(userTableURL())
         if let bundled = Bundle.main.resourceURL {
             candidates.append(bundled.appendingPathComponent("cursor_table.json"))
         }

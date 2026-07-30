@@ -13,8 +13,9 @@ final class OverlayController {
     private var window: OverlayWindow?
     /// nil when calibration data is missing, in which case the app stays on the
     /// idle cat and never attempts shape switching.
-    private let cursorTable: CursorTable?
+    private var cursorTable: CursorTable?
     private var currentAction: CursorAction = .cat("arrow")
+    private var tableMatchesThisSystem = false
 
     private(set) var isActive = false
 
@@ -59,6 +60,10 @@ final class OverlayController {
         tracker.onCursorChanged = { [weak self] in self?.systemCursorChanged() }
         tracker.start(driving: contentView)
 
+        // Decide whether the reference data is usable *before* hiding anything,
+        // while the real pointer is still the one on screen.
+        recomputeTableValidity()
+
         SystemCursor.enableBackgroundControl()
         SystemCursor.hide()
         isActive = true
@@ -73,6 +78,13 @@ final class OverlayController {
         window?.orderOut(nil)
         window = nil
         isActive = false
+    }
+
+    /// Swaps in freshly calibrated data. Validity is re-checked on the next
+    /// activate, while the real pointer is still on screen.
+    func reloadCursorTable(_ table: CursorTable?) {
+        cursorTable = table
+        tableMatchesThisSystem = false
     }
 
     func applySettings() {
@@ -96,7 +108,8 @@ final class OverlayController {
     /// badges in particular are the difference between copying an item and
     /// deleting it.
     private func systemCursorChanged() {
-        guard isActive, AppSettings.shared.shapeSwitchingEnabled else { return }
+        guard isActive, AppSettings.shared.shapeSwitchingEnabled,
+              tableMatchesThisSystem else { return }
 
         let action: CursorAction
         if let table = cursorTable,
@@ -108,6 +121,27 @@ final class OverlayController {
             action = .system
         }
         apply(action)
+    }
+
+    /// Whether the reference data describes *this* machine's cursors.
+    ///
+    /// The table is captured on one macOS version at one pointer size, and
+    /// system cursor artwork changes between releases. On a machine it does not
+    /// describe, nothing matches, every cursor falls back to the system one, and
+    /// the app silently does nothing at all. Checking once up front lets it
+    /// degrade to "cat everywhere" instead, which is at least the thing the user
+    /// installed it for.
+    private func recomputeTableValidity() {
+        guard cursorTable != nil, let reading = SystemCursorReader.read() else {
+            tableMatchesThisSystem = false
+            return
+        }
+        tableMatchesThisSystem = cursorTable?.match(reading) != nil
+        if !tableMatchesThisSystem {
+            NSLog("Cat Cursor: cursor reference data does not match this system "
+                  + "(macOS version or pointer size differs from calibration). "
+                  + "Shape switching is off; showing the idle cat everywhere.")
+        }
     }
 
     private static let verbose = CommandLine.arguments.contains("--verbose")
@@ -128,9 +162,23 @@ final class OverlayController {
             renderer.hostLayer.isHidden = false
             renderer.show(name)
             SystemCursor.hide()
+
         case .system:
-            renderer.hostLayer.isHidden = true
+            // Hand the pointer back first, and only stop drawing once it is
+            // actually back. Doing it the other way round leaves a window with
+            // no pointer at all, and if the restore fails that window never
+            // closes -- which is the worst possible outcome for a cursor app.
             SystemCursor.restore()
+            if SystemCursor.isVisible {
+                renderer.hostLayer.isHidden = true
+            } else {
+                NSLog("Cat Cursor: could not hand the pointer back to the system; "
+                      + "keeping the cat rather than showing nothing.")
+                currentAction = .cat("arrow")
+                renderer.hostLayer.isHidden = false
+                renderer.show("arrow")
+                SystemCursor.hide()
+            }
         }
     }
 
@@ -147,7 +195,9 @@ final class OverlayController {
         overlay window : \(Int(window.frame.width))x\(Int(window.frame.height)) \
         at level \(window.level.rawValue), onScreen=\(window.isVisible)
         cursor layer   : attached=\(attached) contents=\(hasContents) \
-        animating=\(animating)
+        animating=\(animating) hidden=\(layer.isHidden)
+        shape switching: enabled=\(AppSettings.shared.shapeSwitchingEnabled) \
+        tableUsable=\(tableMatchesThisSystem) action=\(currentAction)
         layer bounds   : \(Int(layer.bounds.width))x\(Int(layer.bounds.height))pt \
         position=(\(Int(layer.position.x)), \(Int(layer.position.y)))
         pointer now    : \(NSEvent.mouseLocation)

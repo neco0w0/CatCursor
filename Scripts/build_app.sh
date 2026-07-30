@@ -19,6 +19,10 @@ cp "$ROOT/Info.plist" "$APP/Contents/Info.plist"
 cp -R "$ROOT/Resources/Cursors" "$APP/Contents/Resources/Cursors"
 cp "$ROOT/Resources/cursor_table.json" "$APP/Contents/Resources/cursor_table.json"
 
+# Strip extended attributes before signing: they survive into the distributed
+# zip as ._ AppleDouble files and are pure noise on another machine.
+xattr -cr "$APP"
+
 # Nested code has to be signed before the bundle that contains it.
 codesign --force --sign - "$APP/Contents/Helpers/CursorFixture"
 codesign --force --sign - "$APP"

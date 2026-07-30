@@ -9,10 +9,14 @@ final class StatusItemController: NSObject, NSMenuDelegate {
     override init() {
         super.init()
 
-        statusItem.button?.image = NSImage(
-            systemSymbolName: "cursorarrow.motionlines",
-            accessibilityDescription: "Cat Cursor")
-        statusItem.button?.image?.isTemplate = true
+        // The bundled artwork is a template image -- macOS renders it from alpha
+        // alone, so it follows the menu bar's light or dark appearance.
+        let icon = NSImage(named: "MenuBarIcon")
+            ?? NSImage(systemSymbolName: "cursorarrow.motionlines",
+                       accessibilityDescription: "Cat Cursor")
+        icon?.isTemplate = true
+        icon?.size = NSSize(width: 15, height: 18)
+        statusItem.button?.image = icon
 
         let menu = NSMenu()
         menu.delegate = self

@@ -18,6 +18,8 @@ cp "$ROOT/.build/release/CursorFixture" "$APP/Contents/Helpers/CursorFixture"
 cp "$ROOT/Info.plist" "$APP/Contents/Info.plist"
 cp -R "$ROOT/Resources/Cursors" "$APP/Contents/Resources/Cursors"
 cp "$ROOT/Resources/cursor_table.json" "$APP/Contents/Resources/cursor_table.json"
+cp "$ROOT/Resources/AppIcon.icns" "$APP/Contents/Resources/AppIcon.icns"
+cp "$ROOT"/Resources/MenuBarIcon*.png "$APP/Contents/Resources/"
 
 # Strip extended attributes before signing: they survive into the distributed
 # zip as ._ AppleDouble files and are pure noise on another machine.

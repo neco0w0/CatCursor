@@ -14,6 +14,18 @@
 
 ---
 
+## 长这样
+
+<img src="docs/preview-idle.gif" width="150" alt="待机动画"> <img src="docs/preview-click.gif" width="132" alt="点击时的猫爪">
+
+平时待在那慢慢动，点一下猫会弹出来，松开缩回去。
+
+跟着系统光标换形状：
+
+<img src="docs/preview-shapes.png" width="640" alt="全部十种光标形状">
+
+---
+
 ## 下载
 
 去 [Releases](https://github.com/neco0w0/CatCursor/releases/latest) 下个压缩包，解压出来的CatCursor.app双击就能开。
